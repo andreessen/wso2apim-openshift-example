@@ -1,4 +1,4 @@
-FROM openshift/java:latest
+FROM redhat-openjdk-18/openjdk18-openshift
 
 ENV \
     WSO2_HOME=$WSO2_HOME \
