@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: wso2-apim
+parameters:
+- name: APP_NAME
+  required: true
+- name: WSO2_HOME
+  required: true
+  value: /opt/wso2
+- name: APP_HOSTNAME
+  value: ''
+- name: S2I_SOURCE_REPO
+  value: https://github.com/andreessen/openshift-wso2apim-example 
+- name: S2I_SOURCE_REF
+  value: master 
+- name: S2I_SOURCE_CONTEXT_DIR
+  value: .
+- name: BUILD_STRATEGY
+  description: 'It could be two strategies: source or docker'
+  from: '[sourcedk]'
+  value: docker
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - from:
+        kind: DockerImage
+        name: ${APP_NAME}:latest
+      name: latest
+      referencePolicy:
+        type: ""           
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}
+  spec:
+    resources:
+      limits:
+        memory: 512Mi
+        cpu: 500m
+      requests:
+        memory: 256Mi
+        cpu: 200m
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${APP_NAME}:latest
+    source:
+      contextDir: ${S2I_SOURCE_CONTEXT_DIR}
+      git:
+        ref: ${S2I_SOURCE_REF}
+        uri: ${S2I_SOURCE_REPO}
+      type: Git
+    strategy:
+      ${BUILD_STRATEGY}Strategy:
+        env:
+        - name: WSO2_HOME
+          value: ${WSO2_HOME}
+      type: ${BUILD_STRATEGY}
+    triggers:
+    - type: ConfigChange
+    - imageChange: {}
+      type: ImageChange  
