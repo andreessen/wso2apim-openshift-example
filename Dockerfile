@@ -1,4 +1,4 @@
-FROM fabric8/java-jboss-openjdk8-jdk:1.5.1
+FROM openshift/java:latest
 
 ENV \
     WSO2_HOME=$WSO2_HOME \
@@ -8,8 +8,8 @@ ENV \
 
 RUN \
     set -e ; \
-    curl -Lo /tmp/wso2_apim.zip https://wso2.com/api-management/install/binary/ ; \
     mkdir -p $WSO2_HOME/ ; \
+    curl -Lo /tmp/wso2_apim.zip https://wso2.com/api-management/install/binary/ ; \
     unzip -d $WSO2_HOME /tmp/wso2_apim.zip ; \
     rm -rf /tmp/wso2_*.zip
 
