@@ -11,7 +11,7 @@ parameters:
 - name: APP_HOSTNAME
   value: ''
 - name: S2I_SOURCE_REPO
-  value: https://github.com/andreessen/openshift-wso2apim-example 
+  value: https://github.com/andreessen/wso2apim-openshift-example
 - name: S2I_SOURCE_REF
   value: master 
 - name: S2I_SOURCE_CONTEXT_DIR
