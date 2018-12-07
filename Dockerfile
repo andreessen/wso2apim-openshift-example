@@ -20,4 +20,4 @@ RUN \
 
 EXPOSE 9443
 
-CMD [ "$JAVA_APP_DIR/$WSO2_APIM_VERSION/bin/wso2server.sh" ]
+CMD [ "/deployments/wso2am-2.6.0/bin/wso2server.sh" ]
