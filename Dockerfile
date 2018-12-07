@@ -14,4 +14,4 @@ RUN \
 
 EXPOSE 9443
 
-CMD [ "$JAVA_APP_DIR/bin/wso2server.sh" ]
+CMD [ "/deployments/bin/wso2server.sh" ]
