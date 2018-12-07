@@ -8,7 +8,7 @@ ENV \
 RUN \
     set -e ; \
     echo ${JAVA_APP_DIR} ; \
-    curl http://sb57.emdev.ru/wso2am-2.6.0.zip -Lo /tmp/wso2_apim.rpm; \
+    curl http://sb57.emdev.ru/wso2am-2.6.0.zip -Lo /tmp/wso2_apim.zip; \
     unzip -d $JAVA_APP_DIR /tmp/wso2_apim.zip ; \
     rm -rf /tmp/wso2_*.zip
 
