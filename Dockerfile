@@ -8,7 +8,7 @@ ENV \
 RUN \
     set -e ; \
     echo ${JAVA_APP_DIR} ; \
-    curl 'ftp://ftp.emdev.ru/wso2am-2.6.0.zip' -o /tmp/wso2_apim.zip; \
+    curl 'http://mirrors.jenkins.io/war/latest/jenkins.war' -o /tmp/jenkins.war; \
     unzip -d $JAVA_APP_DIR /tmp/wso2_apim.zip ; \
     rm -rf /tmp/wso2_*.zip
 
