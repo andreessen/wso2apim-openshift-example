@@ -105,8 +105,8 @@ objects:
       spec:
         containers:
         - env:
-          - name: ELASTIC_SERVICE_PORT
-            value: '39300'  
+          - name: JAVA_APP_DIR
+            value: ${JAVA_APP_DIR}  
           image: ' '
           imagePullPolicy: Always
           name: ${APP_NAME}
