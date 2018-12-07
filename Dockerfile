@@ -11,7 +11,7 @@ RUN \
     curl http://sb57.emdev.ru/wso2am-2.6.0.zip -Lo /tmp/wso2_apim.zip; \
     unzip -d $JAVA_APP_DIR /tmp/wso2_apim.zip ; \
     rm -rf /tmp/wso2_*.zip ; \
-    chmod g+w $JAVA_APP_DIR/wso2am-2.6.0
+    chmod -R g+w $JAVA_APP_DIR/wso2am-2.6.0
 
 EXPOSE 9443
 
