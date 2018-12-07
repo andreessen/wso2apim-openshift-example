@@ -3,11 +3,7 @@ FROM fabric8/java-jboss-openjdk8-jdk:1.5.1
 ENV \
     AB_ENABLED=jolokia,jmx_exporter \
     AB_JOLOKIA_AUTH_OPENSHIFT=true \
-    JAVA_OPTIONS=-Xmx1024m \
-    WSO2_APIM_DISTRIB_HOST=${WSO2_APIM_DISTRIB_HOST} \
-    WSO2_APIM_VERSION=${WSO2_APIM_VERSION} \
-    WSO2_APIM_URL=${WSO2_APIM_URL} \
-    JAVA_APP_DIR=${JAVA_APP_DIR}
+    JAVA_OPTIONS=-Xmx1024m
 
 
 RUN \
