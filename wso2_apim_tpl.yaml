@@ -76,6 +76,14 @@ objects:
         env:
         - name: WSO2_HOME
           value: ${WSO2_HOME}
+        - name: JAVA_APP_DIR
+          value: ${JAVA_APP_DIR} 
+        - name: WSO2_APIM_VERSION
+          value: ${WSO2_APIM_VERSION}
+        - name: WSO2_APIM_DISTRIB_HOST
+          value: ${WSO2_APIM_DISTRIB_HOST}
+        - name: WSO2_APIM_URL
+          value: ${WSO2_APIM_URL}  
       type: ${BUILD_STRATEGY}
     triggers:
     - type: ConfigChange
