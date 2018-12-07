@@ -3,16 +3,23 @@ FROM fabric8/java-jboss-openjdk8-jdk:1.5.1
 ENV \
     AB_ENABLED=jolokia,jmx_exporter \
     AB_JOLOKIA_AUTH_OPENSHIFT=true \
-    JAVA_OPTIONS=-Xmx1024m
+    JAVA_OPTIONS=-Xmx1024m \
+    WSO2_APIM_VERSION=${WSO2_APIM_VERSION}
+    WSO2_APIM_DISTRIB_HOST=${WSO2_APIM_DISTRIB_HOST}
+    WSO2_APIM_URL=${WSO2_APIM_URL}
 
 RUN \
     set -e ; \
-    echo ${JAVA_APP_DIR} ; \
-    curl http://sb57.emdev.ru/wso2am-2.6.0.zip -Lo /tmp/wso2_apim.zip; \
+    echo '>>>JAVA_APP_DIR = ${JAVA_APP_DIR}' ; \
+    echo '>>>WSO2_APIM_VERSION = ${WSO2_APIM_VERSION}' ; \
+    echo '>>>WSO2_APIM_DISTRIB_HOST = ${WSO2_APIM_DISTRIB_HOST}' ; \
+    curl http://${WSO2_APIM_DISTRIB_HOST}/${WSO2_APIM_VERSION}.zip -Lo /tmp/wso2_apim.zip; \
     unzip -d $JAVA_APP_DIR /tmp/wso2_apim.zip ; \
     rm -rf /tmp/wso2_*.zip ; \
-    chmod -R g+w $JAVA_APP_DIR/wso2am-2.6.0
+    chmod -R g+w $JAVA_APP_DIR/$WSO2_APIM_VERSION ; \
+    sed -ci.bak1 's|<!--HostName>www.wso2.org</HostName-->|<HostName>$WSO2_APIM_URL</HostName>|' $INSTANCE_HOME/etc/bootstrap.xml ; \
+    sed -ci.bak1 's|<!--MgtHostName>mgt.wso2.org</MgtHostName-->|<MgtHostName>$WSO2_APIM_URL</MgtHostName>|' $INSTANCE_HOME/etc/bootstrap.xml
 
 EXPOSE 9443
 
-CMD [ "/deployments/wso2am-2.6.0/bin/wso2server.sh" ]
+CMD [ "/deployments/${WSO2_APIM_VERSION}/bin/wso2server.sh" ]
