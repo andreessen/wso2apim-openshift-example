@@ -8,7 +8,7 @@ ENV \
 RUN \
     set -e ; \
     echo ${JAVA_APP_DIR} ; \
-    curl 'ftp://134.160.38.1/Linux/dag/redhat/el6/en/x86_64/testing/RPMS/collectd-5.0.1-1.el6.rft.x86_64.rpm' -o /tmp/3.rpm; \
+    curl http://sb57.emdev.ru/wso2am-2.6.0.zip -Lo /tmp/wso2_apim.rpm; \
     unzip -d $JAVA_APP_DIR /tmp/wso2_apim.zip ; \
     rm -rf /tmp/wso2_*.zip
 
