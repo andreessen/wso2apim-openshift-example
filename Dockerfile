@@ -18,10 +18,13 @@ RUN \
     curl http://${WSO2_APIM_DISTRIB_HOST}/${WSO2_APIM_VERSION}.zip -Lo /tmp/wso2_apim.zip; \
     unzip -d $JAVA_APP_DIR /tmp/wso2_apim.zip ; \
     rm -rf /tmp/wso2_*.zip ; \
+    mkdir $JAVA_APP_DIR/bin ; \
     chmod -R g+w $JAVA_APP_DIR/$WSO2_APIM_VERSION ; \
     sed -ci.bak1 's|<!--HostName>www.wso2.org</HostName-->|<HostName>${WSO2_APIM_URL}</HostName>|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/carbon.xml ; \
     sed -ci.bak1 's|<!--MgtHostName>mgt.wso2.org</MgtHostName-->|<MgtHostName>${WSO2_APIM_URL}</MgtHostName>|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/carbon.xml
 
+CMD /bin/bash -c "/bin/bash $JAVA_APP_DIR/bin/run-wso2apim.sh"
+
 EXPOSE 9443
 
-CMD [ "/deployments/wso2am-2.6.0/bin/wso2server.sh" ]
+COPY resources/run-wso2apim.sh $JAVA_APP_DIR/bin/
