@@ -14,4 +14,4 @@ RUN \
 
 EXPOSE 9443
 
-CMD [ "/deployments/bin/wso2server.sh" ]
+CMD [ "/deployments/wso2am-2.6.0/bin/wso2server.sh" ]
