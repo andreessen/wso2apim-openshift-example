@@ -28,8 +28,6 @@ parameters:
   value: wso2am-2.6.0
 - name: WSO2_APIM_DISTRIB_HOST
   value: sb57.emdev.ru
-- name: WSO2_APIM_URL
-  value: ${APP_NAME}-wso2apim.apps.devops.su
 objects:
 - apiVersion: v1
   kind: ImageStream
@@ -83,7 +81,7 @@ objects:
         - name: WSO2_APIM_DISTRIB_HOST
           value: ${WSO2_APIM_DISTRIB_HOST}
         - name: WSO2_APIM_URL
-          value: ${WSO2_APIM_URL}  
+          value: ${APP_NAME}-wso2apim.apps.devops.su
       type: ${BUILD_STRATEGY}
     triggers:
     - type: ConfigChange
@@ -126,7 +124,7 @@ objects:
           - name: WSO2_APIM_DISTRIB_HOST
             value: ${WSO2_APIM_DISTRIB_HOST}
           - name: WSO2_APIM_URL
-            value: ${WSO2_APIM_URL}
+            value: ${APP_NAME}-wso2apim.apps.devops.su
           image: ' '
           imagePullPolicy: Always
           name: ${APP_NAME}
