@@ -19,7 +19,7 @@ RUN \
     unzip -d $JAVA_APP_DIR /tmp/wso2_apim.zip ; \
     rm -rf /tmp/wso2_*.zip ; \
     mkdir $JAVA_APP_DIR/bin ; \
-    chmod -R g+w $JAVA_APP_DIR/$WSO2_APIM_VERSION ; \
+    chmod -R g+w $JAVA_APP_DIR/$WSO2_APIM_VERSION
     
 
 CMD /bin/bash -c "/bin/bash $JAVA_APP_DIR/bin/run-wso2apim.sh"
