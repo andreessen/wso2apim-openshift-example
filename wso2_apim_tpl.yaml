@@ -34,7 +34,7 @@ parameters:
   value: 300m
 - name: DB_NAME
   required: true
-  value: lportal
+  value: apimgtdb
 - name: DB_USER
   required: true
   from: '[a-zA-Z0-9]{16}'
@@ -152,7 +152,7 @@ objects:
               secretKeyRef:
                 key: database-root-password
                 name: ${APP_NAME}-mysql
-          - name: DB_NAME
+          - name: MYSQL_DATABASE
             valueFrom:
               secretKeyRef:
                 key: database-name
@@ -174,11 +174,11 @@ objects:
           readinessProbe:
             exec:
               command:
-              - /bin/sh
-              - -i
-              - -c
-              - MYSQL_PWD="$MYSQL_PASSWORD" mysql -h 127.0.0.1 -u $MYSQL_USER -D $MYSQL_DATABASE
-                -e 'SELECT 1'
+                - /bin/sh
+                - '-i'
+                - '-c'
+                - MYSQL_PWD="$MYSQL_PASSWORD" mysql -h 127.0.0.1 -u $MYSQL_USER
+                  -D $MYSQL_DATABASE -e 'SELECT 1'
             failureThreshold: 3
             initialDelaySeconds: 5
             periodSeconds: 10
