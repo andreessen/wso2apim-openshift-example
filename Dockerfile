@@ -15,6 +15,11 @@ RUN \
     unzip -d $JAVA_APP_DIR /tmp/wso2_apim.zip ; \
     rm -rf /tmp/wso2_*.zip ; \
     mkdir $JAVA_APP_DIR/bin ; \
+    curl -Lo https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.13.zip /tmp/mysql-connector-java-8.0.13.zip ; \
+    mkdir $JAVA_APP_DIR/mysql; \
+    unzip -d $JAVA_APP_DIR/mysql /tmp/mysql-connector-java-8.0.13.zip; \
+    cp /tmp/mysql-connector-java-8.0.13/mysql-connector-java-8.0.13.jar $JAVA_APP_DIR//${WSO2_APIM_VERSION}/repository/components/lib ; \
+    rm -rf /tmp/mysql-connector-java-8.0.13*; \
     chmod -R g+w $JAVA_APP_DIR/$WSO2_APIM_VERSION
     
 

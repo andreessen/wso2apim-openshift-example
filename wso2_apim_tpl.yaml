@@ -28,6 +28,21 @@ parameters:
   value: wso2am-2.6.0
 - name: WSO2_APIM_DISTRIB_HOST
   value: sb57.emdev.ru
+- name: DB_MEMORY_LIMIT
+  value: 512Mi
+- name: DB_CPU_LIMIT
+  value: 300m
+- name: DB_NAME
+  required: true
+  value: lportal
+- name: DB_USER
+  required: true
+  from: '[a-zA-Z0-9]{16}'
+  generate: expression
+- name: DB_PASSWORD
+  required: true
+  from: '[a-zA-Z0-9]{16}'
+  generate: expression  
 objects:
 - apiVersion: v1
   kind: ImageStream
@@ -85,6 +100,116 @@ objects:
     - type: ConfigChange
     - imageChange: {}
       type: ImageChange
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}-mysql
+  spec:
+    replicas: 1
+    selector:
+      name: ${APP_NAME}-mysql
+    strategy:
+      type: Recreate
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        post:
+          execNewPod:
+            command:
+            - /bin/sh
+            - -c
+            - hostname && sleep 10 && mysql -h $MYSQL_SERVICE_HOST
+              -u $MYSQL_USER -D $MYSQL_DATABASE -p $MYSQL_PASSWORD -P 3306 -e 'CREATE
+              TABLE IF NOT EXISTS emails (from_add varchar(40), to_add varchar(40),
+              subject varchar(40), body varchar(200), created_at date);' && sleep 60
+            containerName: mysql
+          failurePolicy: ignore
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+    template:
+      metadata:
+        labels:
+          app: ${APP_NAME}-mysql
+          name: ${APP_NAME}-mysql
+      spec:
+        containers:
+        - env:
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: ${APP_NAME}-mysql
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: ${APP_NAME}-mysql
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-root-password
+                name: ${APP_NAME}-mysql
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                key: database-name
+                name: ${APP_NAME}-mysql
+          image: ' '
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 3306
+            timeoutSeconds: 1
+          name: mysql
+          ports:
+          - containerPort: 3306
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - /bin/sh
+              - -i
+              - -c
+              - MYSQL_PWD="$MYSQL_PASSWORD" mysql -h 127.0.0.1 -u $MYSQL_USER -D $MYSQL_DATABASE
+                -e 'SELECT 1'
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              memory: ${DB_MEMORY_LIMIT}
+              cpu: ${DB_CPU_LIMIT}
+            requests:
+              memory: ${DB_MEMORY_LIMIT}
+              cpu: ${DB_CPU_LIMIT}
+          volumeMounts:
+          - mountPath: /var/lib/mysql/data
+            name: ${APP_NAME}-mysql-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        volumes:
+        - name: ${APP_NAME}-mysql-data
+          emptyDir: {}
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - mysql
+        from:
+          kind: ImageStreamTag
+          name: mysql:5.7
+          namespace: openshift
+      type: ImageChange
+    - type: ConfigChange      
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
@@ -198,7 +323,23 @@ objects:
       deploymentconfig: ${APP_NAME}
       liferay: ""
     sessionAffinity: None
-    type: ClusterIP                 
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}-mysql
+  spec:
+    ports:
+    - name: mysql
+      port: 3306
+      protocol: TCP
+      targetPort: 3306
+    selector:
+      name: ${APP_NAME}-mysql
+    sessionAffinity: None
+    type: ClusterIP                  
 - apiVersion: v1
   kind: Route
   metadata:
@@ -246,4 +387,16 @@ objects:
     to:
       kind: Service
       name: ${APP_NAME}-prod
-      weight: 100            
+      weight: 100
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}-mysql
+  stringData:
+    database-name: ${DB_NAME}
+    database-password: ${DB_PASSWORD}
+    database-root-password: ${DB_PASSWORD}
+    database-user: ${DB_USER}
+  type: Opaque              
