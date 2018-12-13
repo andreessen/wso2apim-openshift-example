@@ -18,7 +18,7 @@ RUN \
     curl -Lo /tmp/mysql-connector-java-8.0.13.zip https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.13.zip ; \
     mkdir /tmp/mysql; \
     unzip -d /tmp/mysql /tmp/mysql-connector-java-8.0.13.zip; \
-    cp /tmp/mysql/mysql-connector-java-8.0.13/mysql-connector-java-8.0.13.jar $JAVA_APP_DIR//${WSO2_APIM_VERSION}/repository/components/lib ; \
+    cp /tmp/mysql/mysql-connector-java-8.0.13/mysql-connector-java-8.0.13.jar $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/components/lib ; \
     rm -rf /tmp/mysql; \
     chmod -R g+w $JAVA_APP_DIR/$WSO2_APIM_VERSION
     

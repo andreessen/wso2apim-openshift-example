@@ -121,10 +121,23 @@ objects:
             command:
             - /bin/sh
             - -c
-            - hostname && sleep 10 && mysql -h $MYSQL_SERVICE_HOST
-              -u $MYSQL_USER -D $MYSQL_DATABASE -p $MYSQL_PASSWORD -P 3306 -e 'CREATE
-              TABLE IF NOT EXISTS emails (from_add varchar(40), to_add varchar(40),
-              subject varchar(40), body varchar(200), created_at date);' && sleep 60
+            - hostname && echo '====' && printenv && echo '====' && echo $MYSQL_SERVICE_HOST && echo '====' && MYSQL_PWD="$MYSQL_ROOT_PASSWORD" 
+              && /opt/rh/rh-mysql57/root/usr/bin/mysql -h $MYSQL_SERVICE_HOST -u root -p$MYSQL_ROOT_PASSWORD -P 3306 -e 'create database userdb;' 
+              && /opt/rh/rh-mysql57/root/usr/bin/mysql -h $MYSQL_SERVICE_HOST -u root -p$MYSQL_ROOT_PASSWORD -P 3306 -e 'create database regdb;' 
+              && /opt/rh/rh-mysql57/root/usr/bin/mysql -h $MYSQL_SERVICE_HOST -u root -p$MYSQL_ROOT_PASSWORD -P 3306 -e 'create database statdb;' 
+              && /opt/rh/rh-mysql57/root/usr/bin/mysql -h $MYSQL_SERVICE_HOST -u root -p$MYSQL_ROOT_PASSWORD -P 3306 -e 'create database mbstoredb;'
+              && /opt/rh/rh-mysql57/root/usr/bin/mysql -h $MYSQL_SERVICE_HOST -u root -p$MYSQL_ROOT_PASSWORD -P 3306 -e "GRANT ALL PRIVILEGES ON apimgtdb.* TO '$MYSQL_USER'@'%';" 
+              && /opt/rh/rh-mysql57/root/usr/bin/mysql -h $MYSQL_SERVICE_HOST -u root -p$MYSQL_ROOT_PASSWORD -P 3306 -e "GRANT ALL PRIVILEGES ON userdb.* TO '$MYSQL_USER'@'%';" 
+              && /opt/rh/rh-mysql57/root/usr/bin/mysql -h $MYSQL_SERVICE_HOST -u root -p$MYSQL_ROOT_PASSWORD -P 3306 -e "GRANT ALL PRIVILEGES ON regdb.* TO '$MYSQL_USER'@'%';"
+              && /opt/rh/rh-mysql57/root/usr/bin/mysql -h $MYSQL_SERVICE_HOST -u root -p$MYSQL_ROOT_PASSWORD -P 3306 -e "GRANT ALL PRIVILEGES ON statdb.* TO '$MYSQL_USER'@'%';"
+              && /opt/rh/rh-mysql57/root/usr/bin/mysql -h $MYSQL_SERVICE_HOST -u root -p$MYSQL_ROOT_PASSWORD -P 3306 -e "GRANT ALL PRIVILEGES ON mbstoredb.* TO '$MYSQL_USER'@'%';"
+              &&  echo $MYSQL_USER && curl http://${WSO2_APIM_DISTRIB_HOST}/${WSO2_APIM_VERSION}.zip -Lo /tmp/wso2_apim.zip && mkdir /tmp/wso2-apim 
+              && unzip -d /tmp/wso2-apim /tmp/wso2_apim.zip
+              && /opt/rh/rh-mysql57/root/usr/bin/mysql -h $MYSQL_SERVICE_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD -P 3306 -D apimgtdb < /tmp/wso2-apim/${WSO2_APIM_VERSION}/dbscripts/apimgt/mysql5.7.sql
+              && /opt/rh/rh-mysql57/root/usr/bin/mysql -h $MYSQL_SERVICE_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD -P 3306 -D userdb < /tmp/wso2-apim/${WSO2_APIM_VERSION}/dbscripts/mysql5.7.sql
+              && /opt/rh/rh-mysql57/root/usr/bin/mysql -h $MYSQL_SERVICE_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD -P 3306 -D regdb < /tmp/wso2-apim/${WSO2_APIM_VERSION}/dbscripts/mysql5.7.sql
+              && /opt/rh/rh-mysql57/root/usr/bin/mysql -h $MYSQL_SERVICE_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD -P 3306 -D mbstoredb < /tmp/wso2-apim/${WSO2_APIM_VERSION}/dbscripts/mb-store/mysql-mb.sql
+              && sleep 10
             containerName: mysql
           failurePolicy: ignore
         timeoutSeconds: 600
@@ -137,6 +150,10 @@ objects:
       spec:
         containers:
         - env:
+          - name: WSO2_APIM_DISTRIB_HOST
+            value: ${WSO2_APIM_DISTRIB_HOST}
+          - name: WSO2_APIM_VERSION
+            value: ${WSO2_APIM_VERSION}  
           - name: MYSQL_USER
             valueFrom:
               secretKeyRef:
