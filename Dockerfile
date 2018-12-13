@@ -28,18 +28,18 @@ USER jboss
 
 RUN \
     set -e ; \
-    echo '>>>JAVA_APP_DIR = ${JAVA_APP_DIR}' ; \
-    echo '>>>WSO2_APIM_VERSION = ${WSO2_APIM_VERSION}' ; \
-    echo '>>>WSO2_APIM_DISTRIB_HOST = ${WSO2_APIM_DISTRIB_HOST}' ; \
-    curl http://${WSO2_APIM_DISTRIB_HOST}/${WSO2_APIM_VERSION}.zip -Lo /tmp/wso2_apim.zip; \
-    unzip -d $JAVA_APP_DIR /tmp/wso2_apim.zip ; \
-    rm -rf /tmp/wso2_*.zip ; \
-    mkdir $JAVA_APP_DIR/bin ; \
-    curl -Lo /tmp/mysql-connector-java-8.0.13.zip https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.13.zip ; \
-    mkdir /tmp/mysql; \
-    unzip -d /tmp/mysql /tmp/mysql-connector-java-8.0.13.zip; \
-    cp /tmp/mysql/mysql-connector-java-8.0.13/mysql-connector-java-8.0.13.jar $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/components/lib ; \
-    rm -rf /tmp/mysql; \
+    echo '>>>JAVA_APP_DIR = ${JAVA_APP_DIR}' && \
+    echo '>>>WSO2_APIM_VERSION = ${WSO2_APIM_VERSION}' &&  \
+    echo '>>>WSO2_APIM_DISTRIB_HOST = ${WSO2_APIM_DISTRIB_HOST}' &&  \
+    curl http://${WSO2_APIM_DISTRIB_HOST}/${WSO2_APIM_VERSION}.zip -Lo /tmp/wso2_apim.zip &&  \
+    unzip -d $JAVA_APP_DIR /tmp/wso2_apim.zip &&  \
+    rm -rf /tmp/wso2_*.zip &&  \
+    mkdir $JAVA_APP_DIR/bin &&  \
+    curl -Lo /tmp/mysql-connector-java-8.0.13.zip https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.13.zip &&  \
+    mkdir /tmp/mysql && \
+    unzip -d /tmp/mysql /tmp/mysql-connector-java-8.0.13.zip &&  \
+    cp /tmp/mysql/mysql-connector-java-8.0.13/mysql-connector-java-8.0.13.jar $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/components/lib &&  \
+    rm -rf /tmp/mysql &&  \
     chmod -R g+w $JAVA_APP_DIR/$WSO2_APIM_VERSION
     
 
@@ -48,3 +48,5 @@ CMD /bin/bash -c "/bin/bash $JAVA_APP_DIR/bin/run-wso2apim.sh"
 EXPOSE 9443
 
 COPY resources/run-wso2apim.sh $JAVA_APP_DIR/bin/
+COPY resources/xslt/master.xslt /tmp
+COPY resources/xslt/append_ds.xslt /tmp
