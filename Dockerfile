@@ -24,8 +24,6 @@ RUN source scl_source enable rh-python36 && \
     pip install --upgrade pip && \
     pip install xq
 
-RUN xq . /deployments/wso2am-2.6.0/repository/conf/datasources/master-datasources.xml
-
 USER jboss
 
 RUN \
