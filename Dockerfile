@@ -50,3 +50,5 @@ EXPOSE 9443
 COPY resources/run-wso2apim.sh $JAVA_APP_DIR/bin/
 COPY resources/xslt/master.xslt /tmp
 COPY resources/xslt/append_ds.xslt /tmp
+COPY resources/xslt/registry.xslt /tmp
+COPY resources/xslt/append_umgt.xslt /tmp

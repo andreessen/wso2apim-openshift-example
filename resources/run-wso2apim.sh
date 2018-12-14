@@ -22,4 +22,10 @@ xsltproc --stringparam pApiMgtDBUrl jdbc:mysql://$MYSQL_SERVICE_HOST:3306/apimgt
 	--stringparam pUMgtDBUrl jdbc:mysql://$MYSQL_SERVICE_HOST:3306/userdb?autoReconnect=true 
 	--stringparam pUMgtDBPassword $MYSQL_PASSWORD --stringparam pUMgtDBUser $MYSQL_USER master.xslt /tmp/master-datasources.xml > $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/datasources/master-datasources.xml
 
+mv $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/user-mgt.xml /tmp/user-mgt.xml
+xsltproc append_umgt.xslt user-mgt.xml > $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/user-mgt.xml
+
+mv $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/registry.xml /tmp/registry.xml
+xsltproc registry.xslt registry.xml > $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/registry.xml
+
 exec $JAVA_APP_DIR/$WSO2_APIM_VERSION/bin/wso2server.sh
