@@ -38,28 +38,9 @@ RUN \
     curl -Lo /tmp/mysql-connector-java-5.1.34.zip https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.34.zip &&  \
     mkdir /tmp/mysql && \
     unzip -d /tmp/mysql /tmp/mysql-connector-java-5.1.34.zip &&  \
-    cp /tmp/mysql/mysql-connector-java-5.1.34/mysql-connector-java-5.1.34.jar $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/components/lib &&  \
+    cp /tmp/mysql/mysql-connector-java-5.1.34/mysql-connector-java-5.1.34-bin.jar $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/components/lib &&  \
     rm -rf /tmp/mysql &&  \
     chmod -R g+w $JAVA_APP_DIR/$WSO2_APIM_VERSION
-
-
-RUN \
-	mv $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/datasources/master-datasources.xml /tmp/master-datasources_.xml && \
-	xsltproc /tmp/append_ds.xslt /tmp/master-datasources_.xml > /tmp/master-datasources.xml && \
-	xsltproc --stringparam pApiMgtDBUrl jdbc:mysql://"$MYSQL_SERVICE_HOST":3306/apimgtdb?autoReconnect=true \
-		--stringparam pApiMgtDBPassword "$MYSQL_PASSWORD" --stringparam pApiMgtDBUser "$MYSQL_USER" \
-		--stringparam pMBDBUrl jdbc:mysql://"$MYSQL_SERVICE_HOST":3306/mbstoredb?autoReconnect=true \
-		--stringparam pMBDBPassword "$MYSQL_PASSWORD" --stringparam pMBDBUser "$MYSQL_USER" \
-		--stringparam pStatDBUrl jdbc:mysql://"$MYSQL_SERVICE_HOST":3306/statdb?autoReconnect=true \
-		--stringparam pStatDBPassword "$MYSQL_PASSWORD" --stringparam pStatDBUser "$MYSQL_USER" \
-		--stringparam pRegDBUrl jdbc:mysql://"$MYSQL_SERVICE_HOST":3306/regdb?autoReconnect=true \
-		--stringparam pRegDBPassword "$MYSQL_PASSWORD" --stringparam pRegDBUser "$MYSQL_USER" \
-		--stringparam pUMgtDBUrl jdbc:mysql://"$MYSQL_SERVICE_HOST":3306/userdb?autoReconnect=true  \
-		--stringparam pUMgtDBPassword "$MYSQL_PASSWORD" --stringparam pUMgtDBUser "$MYSQL_USER" /tmp/master.xslt /tmp/master-datasources.xml > $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/datasources/master-datasources.xml && \
-	mv $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/user-mgt.xml /tmp/user-mgt.xml && \
-	xsltproc /tmp/append_umgt.xslt /tmp/user-mgt.xml > $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/user-mgt.xml && \
-	mv $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/registry.xml /tmp/registry.xml && \
-	xsltproc /tmp/registry.xslt /tmp/registry.xml > $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/registry.xml    
     
 
 CMD /bin/bash -c "/bin/bash $JAVA_APP_DIR/bin/run-wso2apim.sh"
