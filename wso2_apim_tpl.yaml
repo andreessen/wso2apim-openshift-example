@@ -265,6 +265,28 @@ objects:
             value: ${WSO2_APIM_DISTRIB_HOST}
           - name: WSO2_APIM_URL
             value: ${APP_NAME}-wso2apim.apps.devops.su
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: ${APP_NAME}-mysql
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: ${APP_NAME}-mysql
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-root-password
+                name: ${APP_NAME}-mysql
+          - name: MYSQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                key: database-name
+                name: ${APP_NAME}-mysql
+          - name: MYSQL_SERVICE_HOST
+            value: ${APP_NAME}-mysql    
           image: ' '
           imagePullPolicy: Always
           name: ${APP_NAME}
