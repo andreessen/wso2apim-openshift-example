@@ -2,6 +2,7 @@
 	<xsl:output indent="yes" omit-xml-declaration="yes"/>
 	<xsl:strip-space elements="*"/>
 
+	<xsl:param name="pRegDBUrl" />
 
 	<xsl:template match="node()|@*">
 		<xsl:copy>
@@ -20,7 +21,7 @@
 		</dbConfig>
 		<remoteInstance url="https://localhost:9443/registry">
 			<id>gov</id>
-			<cacheId>user@jdbc:mysql://db.mysql-wso2.com:3306/regdb</cacheId>
+			<cacheId><xsl:value-of select="$pRegDBUrl"/></cacheId>
 			<dbConfig>govregistry</dbConfig>
 			<readOnly>false</readOnly>
 			<enableCache>true</enableCache>
