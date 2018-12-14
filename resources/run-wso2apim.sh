@@ -26,6 +26,6 @@ cp $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/user-mgt.xml /tmp/user-mgt
 xsltproc /tmp/append_umgt.xslt /tmp/user-mgt.xml > $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/user-mgt.xml
 
 cp $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/registry.xml /tmp/registry.xml
-xsltproc /tmp/registry.xslt /tmp/registry.xml > $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/registry.xml
+xsltproc --stringparam pRegDBUrl "$MYSQL_USER"@jdbc:mysql://"$MYSQL_SERVICE_HOST":3306/regdb /tmp/registry.xslt /tmp/registry.xml > $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/registry.xml
 
 exec $JAVA_APP_DIR/$WSO2_APIM_VERSION/bin/wso2server.sh
