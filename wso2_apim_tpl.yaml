@@ -258,27 +258,27 @@ objects:
           execNewPod:
             command:
             - /bin/sh
-            - -c
-            - hostname 
-              && echo '====' && printenv && echo '====' && echo $MYSQL_SERVICE_HOST && echo '====' && MYSQL_PWD="$MYSQL_ROOT_PASSWORD"
-              && for i in {1..5} ; do \
-                  echo '>>>' $i \
-                  RESULT=$(mysql --batch --skip-column-names -h $MYSQL_SERVICE_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD -e "SHOW DATABASES LIKE 'mbstoredb';" | grep mbstoredb > /dev/null; echo "$?") \
-                  echo '>>>' $RESULT \
-                  if [ $RESULT -eq 0 ];then \
-                      echo "A database with the name mbstoredb already exists. exiting" \
-                      exit; \
-                  fi \
-                  if [ "$i" -lt 5 ] ; then \
-                      sleep 20 \
-                  fi \
-                  if [ "$i" == 5 ] ; then \
-                    echo "Failed to check mbstoredb. Sending error." \
-                      error 20 \
-                  fi \
-              done \
-              && sleep 10
-            containerName: mysql
+            - '-c'
+            - >-
+              hostname && echo '====' && printenv && echo '====' && echo
+              $MYSQL_SERVICE_HOST && echo '====' &&
+              MYSQL_PWD="$MYSQL_ROOT_PASSWORD" &&    for i in {1..5}; do 
+                echo '>>>' $i 
+                RESULT=$(mysql --batch --skip-column-names -h $MYSQL_SERVICE_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD -e "SHOW DATABASES LIKE 'mbstoredb';" | grep mbstoredb > /dev/null; echo "$?") 
+                if [ $RESULT = 0 ]; then 
+                  echo "A database with the name mbstoredb already exists. exiting" 
+                  exit 
+                fi
+                echo ' >>> "$RESULT "' 
+                if [ "$i" -lt 5 ] ; then 
+                  sleep 10 
+                fi 
+                if [ "$i" == 5 ] ; then 
+                  echo "Failed to check mbstoredb. Sending error." 
+                  error 20 
+                fi 
+              done  && sleep 10
+            containerName: ${APP_NAME}
           failurePolicy: ignore
         timeoutSeconds: 600
         updatePeriodSeconds: 1
