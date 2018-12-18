@@ -271,7 +271,7 @@ objects:
                 fi
                 echo ' >>> "$RESULT "' 
                 if [ "$i" -lt 5 ] ; then 
-                  sleep 10 
+                  sleep 30 
                 fi 
                 if [ "$i" == 5 ] ; then 
                   echo "Failed to check mbstoredb. Sending error." 
