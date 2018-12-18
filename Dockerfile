@@ -13,6 +13,7 @@ RUN \
     yum-config-manager --enable centos-sclo-rh-testing && \
     INSTALL_PKGS="rh-python36 rh-python36-python-pip" && \
     yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus $INSTALL_PKGS && \
+    yum install -y mysql-client && \
     rpm -V $INSTALL_PKGS && \
     yum clean all -y
 
