@@ -14,4 +14,8 @@ $ oc --as=system:admin -n wso2apim create -f limit-ranges.yaml
 $ oc create -f wso2_apim_tpl.yaml
 $ oc new-app wso2-apim -p APP_NAME=wso2-apim
 ```
-
+To clean all up:
+```
+oc delete template wso2-apim
+oc delete all -l app=wso2-apim
+```
