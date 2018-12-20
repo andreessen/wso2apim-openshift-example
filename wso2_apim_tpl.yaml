@@ -266,12 +266,29 @@ objects:
                 echo '>>>' $i 
                 RESULT=$(mysql --batch --skip-column-names -h $MYSQL_SERVICE_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD -e "SHOW DATABASES LIKE 'mbstoredb';" | grep mbstoredb > /dev/null; echo "$?") 
                 if [ $RESULT = 0 ]; then 
-                  echo "A database with the name mbstoredb already exists. exiting" 
-                  exit 
+                  echo "A database with the name mbstoredb already exists. Checking tables number...."
+
+                  RESULT_MB=$(mysql --batch --skip-column-names -h $MYSQL_SERVICE_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD -e "SELECT count(*) AS totalTables  FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'mbstoredb';") 
+                  echo '>>> Res_MB = ' $RESULT_MB
+
+                  RESULT_ADB=$(mysql --batch --skip-column-names -h $MYSQL_SERVICE_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD -e "SELECT count(*) AS totalTables  FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'apimgtdb';") 
+                  echo '>>> Res_ADB = ' $RESULT_ADB
+
+                  RESULT_UDB=$(mysql --batch --skip-column-names -h $MYSQL_SERVICE_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD -e "SELECT count(*) AS totalTables  FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'userdb';") 
+                  echo '>>> Res_UDB = ' $RESULT_UDB
+
+                  RESULT_RDB=$(mysql --batch --skip-column-names -h $MYSQL_SERVICE_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD -e "SELECT count(*) AS totalTables  FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'regdb';") 
+                  echo '>>> Res_RDB = ' $RESULT_RDB
+
+                  if [ "$RESULT_MB" -gt 0 -a  "$RESULT_ADB" -gt 0 -a "$RESULT_UDB" -gt 0 -a "$RESULT_RDB" -gt 0 ] ; then 
+                    echo "Seems to be ok with all DBs."
+                    sleep 30
+                    exit 
+                  fi
                 fi
-                echo ' >>> "$RESULT "' 
+                echo '>>>Final Result = ' $RESULT 
                 if [ "$i" -lt 5 ] ; then 
-                  sleep 30 
+                  sleep 40 
                 fi 
                 if [ "$i" == 5 ] ; then 
                   echo "Failed to check mbstoredb. Sending error." 
@@ -325,6 +342,16 @@ objects:
           ports:
           - containerPort: 9443
             protocol: TCP
+          readinessProbe:
+            failureThreshold: 20
+            httpGet:
+              path: /services/Version
+              port: 9763
+              scheme: HTTP
+            initialDelaySeconds: 90
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 5
           resources:
             limits:
               cpu: ${WSO2_CPU_LIMIT}
