@@ -9,6 +9,19 @@ sed -ci.bak1 's|<!--HostName>www.wso2.org</HostName-->|<HostName>'"$WSO2_APIM_UR
 sed -ci.bak1 's|<!--MgtHostName>mgt.wso2.org</MgtHostName-->|<MgtHostName>'"$WSO2_APIM_URL"'</MgtHostName>|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/carbon.xml
 sed -ci.bak1 's|port="9443"|port="9443" proxyPort="443"|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/tomcat/catalina-server.xml
 
+sed -ci.bak1 's|"enabled" : false,    // values true , false , "auto" - will look for  X-Forwarded-* headers|"enabled" : true,    // values true , false , "auto" - will look for  X-Forwarded-* headers|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/deployment/server/jaggeryapps/store/site/conf/site.json
+sed -ci.bak1 's|"host" : "sample.proxydomain.com", // If reverse proxy do not have a domain name use IP|"host" : "'"$WSO2_APIM_URL"'", // If reverse proxy do not have a domain name use IP|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/deployment/server/jaggeryapps/store/site/conf/site.json
+sed -ci.bak1 's|"context":"",|"context":"/store",|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/deployment/server/jaggeryapps/store/site/conf/site.json
+
+sed -ci.bak1 's|"enabled" : false,    // values true , false , "auto" - will look for  X-Forwarded-* headers|"enabled" : true,    // values true , false , "auto" - will look for  X-Forwarded-* headers|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/deployment/server/jaggeryapps/publisher/site/conf/site.json
+sed -ci.bak1 's|"host" : "sample.proxydomain.com", // If reverse proxy do not have a domain name use IP|"host" : "'"$WSO2_APIM_URL"'", // If reverse proxy do not have a domain name use IP|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/deployment/server/jaggeryapps/publisher/site/conf/site.json
+sed -ci.bak1 's|"context":"",|"context":"/publisher",|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/deployment/server/jaggeryapps/publisher/site/conf/site.json
+
+sed -ci.bak1 's|"enabled" : false,    // values true , false , "auto" - will look for  X-Forwarded-* headers|"enabled" : true,    // values true , false , "auto" - will look for  X-Forwarded-* headers|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/deployment/server/jaggeryapps/admin/site/conf/site.json
+sed -ci.bak1 's|"host" : "sample.proxydomain.com", // If reverse proxy do not have a domain name use IP|"host" : "'"$WSO2_APIM_URL"'", // If reverse proxy do not have a domain name use IP|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/deployment/server/jaggeryapps/admin/site/conf/site.json
+sed -ci.bak1 's|"context":"",|"context":"/admin",|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/deployment/server/jaggeryapps/admin/site/conf/site.json
+
+
 cp $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/datasources/master-datasources.xml /tmp/master-datasources_.xml
 xsltproc /tmp/append_ds.xslt /tmp/master-datasources_.xml > /tmp/master-datasources.xml
 xsltproc --stringparam pApiMgtDBUrl jdbc:mysql://"$MYSQL_SERVICE_HOST":3306/apimgtdb?autoReconnect=true \
