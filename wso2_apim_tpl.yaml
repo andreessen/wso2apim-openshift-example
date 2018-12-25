@@ -5,6 +5,9 @@ metadata:
 parameters:
 - name: APP_NAME
   required: true
+- name: OPENSHIFT_DOMAIN
+  required: true
+  value: 'devops.su'
 - name: WSO2_HOME
   required: true
   value: /opt/wso2
@@ -93,8 +96,13 @@ objects:
           value: ${WSO2_APIM_VERSION}
         - name: WSO2_APIM_DISTRIB_HOST
           value: ${WSO2_APIM_DISTRIB_HOST}
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace  
         - name: WSO2_APIM_URL
-          value: ${APP_NAME}-wso2apim.apps.devops.su
+          value: ${APP_NAME}-${POD_NAMESPACE}.apps.${OPENSHIFT_DOMAIN}
       type: ${BUILD_STRATEGY}
     triggers:
     - type: ConfigChange
@@ -312,8 +320,13 @@ objects:
             value: ${WSO2_APIM_VERSION}
           - name: WSO2_APIM_DISTRIB_HOST
             value: ${WSO2_APIM_DISTRIB_HOST}
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace  
           - name: WSO2_APIM_URL
-            value: ${APP_NAME}-wso2apim.apps.devops.su
+            value: ${APP_NAME}-${POD_NAMESPACE}.apps.${OPENSHIFT_DOMAIN}
           - name: MYSQL_USER
             valueFrom:
               secretKeyRef:

@@ -3,29 +3,8 @@ FROM fabric8/java-jboss-openjdk8-jdk:1.5.1
 ENV \
     AB_ENABLED=jolokia,jmx_exporter \
     AB_JOLOKIA_AUTH_OPENSHIFT=true \
-    JAVA_OPTIONS=-Xmx1024m \
-    PATH="/opt/rh/rh-python36/root/usr/bin/:${PATH}"
+    JAVA_OPTIONS=-Xmx1024m
 
-USER root
-
-RUN \
-    yum install -y fix-permissions centos-release-scl-rh && \
-    yum-config-manager --enable centos-sclo-rh-testing && \
-    INSTALL_PKGS="rh-python36 rh-python36-python-pip" && \
-    yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus $INSTALL_PKGS && \
-    yum install -y mysql && \
-    rpm -V $INSTALL_PKGS && \
-    yum clean all -y
-
-RUN source scl_source enable rh-python36 && \
-    virtualenv /opt/app-root && \
-    chown -R 1001:0 /opt/app-root && \
-#    fix-permissions /opt/app-root && \
-#    rpm-file-permissions && \
-    pip install --upgrade pip && \
-    pip install xq
-
-USER jboss
 
 RUN \
     set -e ; \
