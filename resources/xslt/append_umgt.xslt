@@ -11,10 +11,7 @@
  </xsl:template>
 
 <xsl:template match='/UserManager/Realm/Configuration/Property[@name="dataSource"]'>
-  <xsl:copy>
-            <!-- And everything inside it -->
-            <xsl:apply-templates select="@* | node()"/>
-        </xsl:copy>
+  
   <Property name="dataSource">jdbc/WSO2UM_DB</Property>
  </xsl:template>
 
