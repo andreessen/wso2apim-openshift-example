@@ -6,6 +6,16 @@ ENV \
     JAVA_OPTIONS=-Xmx1024m
 
 
+USER root
+
+RUN \
+    yum install -y mysql && \
+    yum clean all -y
+
+
+USER jboss    
+
+
 RUN \
     set -e ; \
     echo '>>>JAVA_APP_DIR = ${JAVA_APP_DIR}' && \
