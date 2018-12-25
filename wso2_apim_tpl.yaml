@@ -102,7 +102,7 @@ objects:
               apiVersion: v1
               fieldPath: metadata.namespace  
         - name: WSO2_APIM_URL
-          value: ${APP_NAME}-${POD_NAMESPACE}.apps.${OPENSHIFT_DOMAIN}
+          value: ${APP_NAME}-$(POD_NAMESPACE).apps.${OPENSHIFT_DOMAIN}
       type: ${BUILD_STRATEGY}
     triggers:
     - type: ConfigChange
@@ -326,7 +326,7 @@ objects:
                 apiVersion: v1
                 fieldPath: metadata.namespace  
           - name: WSO2_APIM_URL
-            value: ${APP_NAME}-${POD_NAMESPACE}.apps.${OPENSHIFT_DOMAIN}
+            value: ${APP_NAME}-$(POD_NAMESPACE).apps.${OPENSHIFT_DOMAIN}
           - name: MYSQL_USER
             valueFrom:
               secretKeyRef:

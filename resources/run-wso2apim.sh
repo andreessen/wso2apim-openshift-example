@@ -8,7 +8,6 @@ echo '>>>JAVA_APP_DIR = ${JAVA_APP_DIR}'
 sed -ci.bak1 's|<!--HostName>www.wso2.org</HostName-->|<HostName>'"$WSO2_APIM_URL"'</HostName>|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/carbon.xml
 sed -ci.bak1 's|<!--MgtHostName>mgt.wso2.org</MgtHostName-->|<MgtHostName>'"$WSO2_APIM_URL"'</MgtHostName>|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/carbon.xml
 sed -ci.bak1 's|port="9443"|port="9443" proxyPort="443"|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/tomcat/catalina-server.xml
-sed -ci.bak1 's|<GatewayEndpoint>http://${carbon.local.ip}:${http.nio.port},https://${carbon.local.ip}:${https.nio.port}</GatewayEndpoint>|<GatewayEndpoint>http://'"$WSO2_APIM_URL"',https://'"$WSO2_APIM_URL"'</GatewayEndpoint>|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/conf/api-manager.xml
 
 sed -ci.bak1 's|"enabled" : false,    // values true , false , "auto" - will look for  X-Forwarded-* headers|"enabled" : true,    // values true , false , "auto" - will look for  X-Forwarded-* headers|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/deployment/server/jaggeryapps/store/site/conf/site.json
 sed -ci.bak1 's|"host" : "sample.proxydomain.com", // If reverse proxy do not have a domain name use IP|"host" : "'"$WSO2_APIM_URL"'", // If reverse proxy do not have a domain name use IP|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/deployment/server/jaggeryapps/store/site/conf/site.json
