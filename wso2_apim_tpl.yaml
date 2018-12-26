@@ -373,10 +373,15 @@ objects:
             limits:
               cpu: ${WSO2_CPU_LIMIT}
               memory: ${WSO2_MEMORY_LIMIT}
-          volumeMounts: {}
+          volumeMounts:
+          - mountPath: /deployments/${WSO2_APIM_VERSION}/deployment/server
+            name: ${APP_NAME}-server-data
         dnsPolicy: ClusterFirst
         restartPolicy: Always
-        volumes: {}
+        volumes:
+        - name: ${APP_NAME}-server-data
+          persistentVolumeClaim:
+            claimName: ${APP_NAME}-server-data
     triggers:
     - type: ConfigChange
     - imageChangeParams:
@@ -516,4 +521,16 @@ objects:
     database-password: ${DB_PASSWORD}
     database-root-password: ${DB_PASSWORD}
     database-user: ${DB_USER}
-  type: Opaque              
+  type: Opaque
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}-server-data
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi           
