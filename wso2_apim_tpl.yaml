@@ -327,6 +327,10 @@ objects:
                 fieldPath: metadata.namespace  
           - name: WSO2_APIM_URL
             value: ${APP_NAME}-$(POD_NAMESPACE).apps.${OPENSHIFT_DOMAIN}
+          - name: WSO2_APIM_PROD_URL
+            value: ${APP_NAME}-prod-$(POD_NAMESPACE).apps.${OPENSHIFT_DOMAIN}
+          - name: WSO2_APIM_SANDBOX_URL
+            value: ${APP_NAME}-sandbox-$(POD_NAMESPACE).apps.${OPENSHIFT_DOMAIN}  
           - name: MYSQL_USER
             valueFrom:
               secretKeyRef:
