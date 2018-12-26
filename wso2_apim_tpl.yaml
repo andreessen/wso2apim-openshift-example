@@ -374,7 +374,7 @@ objects:
               cpu: ${WSO2_CPU_LIMIT}
               memory: ${WSO2_MEMORY_LIMIT}
           volumeMounts:
-          - mountPath: /deployments/${WSO2_APIM_VERSION}/deployment/server
+          - mountPath: /deployments/${WSO2_APIM_VERSION}/repository/deployment/server
             name: ${APP_NAME}-server-data
         dnsPolicy: ClusterFirst
         restartPolicy: Always
