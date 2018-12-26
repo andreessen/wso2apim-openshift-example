@@ -25,6 +25,9 @@ RUN \
     unzip -d $JAVA_APP_DIR /tmp/wso2_apim.zip &&  \
     rm -rf /tmp/wso2_*.zip &&  \
     mkdir $JAVA_APP_DIR/bin &&  \
+    # add libraries for Kubernetes membership scheme based clustering - https://github.com/wso2/docker-apim/blob/2.6.x/dockerfiles/centos/apim/Dockerfile
+    curl -Lo $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/components/lib/dnsjava-2.1.8.jar https://repo1.maven.org/maven2/dnsjava/dnsjava/2.1.8/dnsjava-2.1.8.jar &&  \
+    curl -Lo $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/components/dropins/kubernetes-membership-scheme-1.0.5.jar https://repo1.maven.org/maven2/org/wso2/carbon/kubernetes/artifacts/kubernetes-membership-scheme/1.0.5/kubernetes-membership-scheme-1.0.5.jar &&  \
     curl -Lo /tmp/mysql-connector-java-5.1.34.zip https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.34.zip &&  \
     mkdir /tmp/mysql && \
     unzip -d /tmp/mysql /tmp/mysql-connector-java-5.1.34.zip &&  \
