@@ -20,6 +20,9 @@ sed -ci.bak1 's|"enabled" : false,    // values true , false , "auto" - will loo
 sed -ci.bak1 's|"host" : "sample.proxydomain.com", // If reverse proxy do not have a domain name use IP|"host" : "'"$WSO2_APIM_URL"'", // If reverse proxy do not have a domain name use IP|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/deployment/server/jaggeryapps/publisher/site/conf/site.json
 sed -ci.bak1 's|"context":"",|"context":"/publisher",|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/deployment/server/jaggeryapps/publisher/site/conf/site.json
 
+sed -ci.bak1 's|server : "localhost",|server : "'"$WSO2_APIM_URL"'",|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/deployment/server/jaggeryapps/publisher/module/manager/manager.jar
+sed -ci.bak1 's|port : "9443"|port : "443"|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/deployment/server/jaggeryapps/publisher/module/manager/manager.jar
+
 sed -ci.bak1 's|"enabled" : false,    // values true , false , "auto" - will look for  X-Forwarded-\* headers|"enabled" : true,    // values true , false , "auto" - will look for  X-Forwarded-\* headers|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/deployment/server/jaggeryapps/admin/site/conf/site.json
 sed -ci.bak1 's|"host" : "sample.proxydomain.com", // If reverse proxy do not have a domain name use IP|"host" : "'"$WSO2_APIM_URL"'", // If reverse proxy do not have a domain name use IP|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/deployment/server/jaggeryapps/admin/site/conf/site.json
 sed -ci.bak1 's|"context":"",|"context":"/admin",|' $JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/deployment/server/jaggeryapps/admin/site/conf/site.json
