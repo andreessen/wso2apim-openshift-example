@@ -23,7 +23,7 @@ RUN \
     echo '>>>WSO2_APIM_DISTRIB_HOST = ${WSO2_APIM_DISTRIB_HOST}' &&  \
     curl http://${WSO2_APIM_DISTRIB_HOST}/${WSO2_APIM_VERSION}.zip -Lo /tmp/wso2_apim.zip &&  \
     unzip -d /tmp/$JAVA_APP_DIR /tmp/wso2_apim.zip &&  \
-    cp -R /tmp/$JAVA_APP_DIR/${WSO2_APIM_VERSION} $JAVA_APP_DIR
+    cp -R /tmp/$JAVA_APP_DIR/${WSO2_APIM_VERSION} $JAVA_APP_DIR &&  \
     mkdir -p /tmp/repository/deployment/server &&  \
     cp -R /tmp/$JAVA_APP_DIR/${WSO2_APIM_VERSION}/repository/deployment/server/* /tmp/repository/deployment/server &&  \
     rm -rf /tmp/wso2_*.zip &&  \
