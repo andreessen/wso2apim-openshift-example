@@ -23,6 +23,8 @@ RUN \
     echo '>>>WSO2_APIM_DISTRIB_HOST = ${WSO2_APIM_DISTRIB_HOST}' &&  \
     curl http://${WSO2_APIM_DISTRIB_HOST}/${WSO2_APIM_VERSION}.zip -Lo /tmp/wso2_apim.zip &&  \
     unzip -d $JAVA_APP_DIR /tmp/wso2_apim.zip &&  \
+    mkdir -p /tmp/repository/deployment/server &&  \
+    cp -R $JAVA_APP_DIR/repository/deployment/server/* /tmp/repository/deployment/server &&  \
     rm -rf /tmp/wso2_*.zip &&  \
     mkdir $JAVA_APP_DIR/bin &&  \
     # add libraries for Kubernetes membership scheme based clustering - https://github.com/wso2/docker-apim/blob/2.6.x/dockerfiles/centos/apim/Dockerfile
